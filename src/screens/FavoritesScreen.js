@@ -29,6 +29,9 @@ const FavoritesScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+              <Text style={styles.headerTitle}>Bookmarked Words</Text>
+            </View>
       {favorites.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={[styles.emptyText, { color: theme.colors.text }]}>
@@ -54,6 +57,17 @@ const FavoritesScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginBottom: 15,
+    width: '100%',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   emptyContainer: {
     flex: 1,

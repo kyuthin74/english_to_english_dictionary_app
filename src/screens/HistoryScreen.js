@@ -26,6 +26,9 @@ const HistoryScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+        <Text style={styles.headerTitle}>Recent Searches</Text>
+      </View>
       {history.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={[styles.emptyText, { color: theme.colors.text }]}>
@@ -34,17 +37,15 @@ const HistoryScreen = ({ navigation }) => {
         </View>
       ) : (
         <>
-          <View style={styles.header}>
-            <Text style={[styles.headerText, { color: theme.colors.text }]}>
-              Recent Searches
-            </Text>
-            <IconButton
-              icon="delete"
-              iconColor={theme.colors.primary}
-              size={24}
-              onPress={clearHistory}
-            />
-          </View>
+          <TouchableOpacity
+  onPress={clearHistory}
+  style={[styles.clearHistoryContainer, { backgroundColor: theme.colors.border }]}
+>
+<Text style={[styles.clearHistoryText, { color: theme.colors.text }]}>Clear History</Text>
+  <IconButton icon="delete" iconColor={theme.colors.primary} size={20} />
+</TouchableOpacity>
+
+          <View>
           <FlatList
             data={history}
             renderItem={renderItem}
@@ -55,6 +56,7 @@ const HistoryScreen = ({ navigation }) => {
               />
             )}
           />
+          </View>
         </>
       )}
     </View>
@@ -65,6 +67,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderRadius: 8,
+    marginBottom: 15,
+    width: '100%',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -73,14 +87,19 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
   },
-  header: {
+  clearHistoryContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    alignSelf: 'flex-end',
+    marginRight: 20,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    marginBottom: 20,
+    elevation: 2,
   },
-  headerText: {
-    fontSize: 18,
+  clearHistoryText: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
   separator: {

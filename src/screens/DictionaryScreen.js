@@ -136,7 +136,7 @@ const DictionaryScreen = ({ navigation }) => {
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Word of the Day Section */}
       {wordOfDay && (
-        <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <Card style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <Card.Content>
             <View style={styles.cardHeader}>
               <Title style={{ color: theme.colors.primary }}>Word of the Day</Title>
@@ -228,7 +228,7 @@ const DictionaryScreen = ({ navigation }) => {
             <TouchableOpacity
               key={word}
               onPress={() => handleWordPress(word)}
-              style={[styles.wordCard, { backgroundColor: theme.colors.surface }]}
+              style={[styles.wordCard, { backgroundColor: theme.colors.card }]}
             >
               <Text style={{ color: theme.colors.text }}>{word}</Text>
             </TouchableOpacity>

@@ -12,6 +12,9 @@ const SettingsScreen = () => {
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
+      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+              <Text style={styles.headerTitle}>Settings</Text>
+            </View>
       <List.Section>
         <List.Subheader style={{ color: theme.colors.text }}>
           Appearance
@@ -52,6 +55,17 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginBottom: 15,
+    width: '100%',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
