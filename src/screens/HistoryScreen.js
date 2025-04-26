@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, List, IconButton } from 'react-native-paper';
 import { ThemeContext } from '../context/ThemeContext';
 import { WordContext } from '../context/WordContext';
 
 const HistoryScreen = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
-  const { history, clearHistory } = useContext(WordContext);
+  const { history, clearHistory, removeFromHistory } = useContext(WordContext);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -14,15 +14,36 @@ const HistoryScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <List.Item
-      title={item.word.word}
-      description={formatDate(item.timestamp)}
-      onPress={() => navigation.navigate('Search', { word: item.word })}
-      titleStyle={{ color: theme.colors.text }}
-      descriptionStyle={{ color: theme.colors.placeholder }}
-      style={{ backgroundColor: theme.colors.card }}
-    />
+    <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
+      <TouchableOpacity
+        style={styles.cardContent}
+        onPress={() => navigation.navigate('Search', { word: item.word })}
+        activeOpacity={0.7}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+            {item.word.word}
+          </Text>
+          <Text style={[styles.cardSubtitle, { color: theme.colors.placeholder }]}>
+            {formatDate(item.timestamp)}
+          </Text>
+        </View>
+      </TouchableOpacity>
+  
+      <IconButton
+        icon="delete"
+        iconColor={theme.colors.primary}
+        size={20}
+        onPress={() => handleDeleteOne(item.timestamp)}
+      />
+    </View>
   );
+  
+  const handleDeleteOne = (timestamp) => {
+    removeFromHistory(timestamp);
+  };
+  
+  
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -37,27 +58,29 @@ const HistoryScreen = ({ navigation }) => {
         </View>
       ) : (
         <>
-          <TouchableOpacity
-  onPress={clearHistory}
-  style={[styles.clearHistoryContainer, { backgroundColor: theme.colors.border }]}
->
-<Text style={[styles.clearHistoryText, { color: theme.colors.text }]}>Clear History</Text>
-  <IconButton icon="delete" iconColor={theme.colors.primary} size={20} />
-</TouchableOpacity>
+  <ScrollView
+    contentContainerStyle={{ paddingBottom: 80 }}
+    showsVerticalScrollIndicator={false}
+  >
+    <TouchableOpacity
+      onPress={clearHistory}
+      style={[styles.clearHistoryContainer, { backgroundColor: theme.colors.border }]}
+    >
+      <Text style={[styles.clearHistoryText, { color: theme.colors.text }]}>
+        Delete All Histories
+      </Text>
+      <IconButton icon="delete" iconColor={theme.colors.primary} size={18} />
+    </TouchableOpacity>
 
-          <View>
-          <FlatList
-            data={history}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.timestamp}
-            ItemSeparatorComponent={() => (
-              <View
-                style={[styles.separator, { backgroundColor: theme.colors.border }]}
-              />
-            )}
-          />
-          </View>
-        </>
+    <FlatList
+      data={history}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.timestamp}
+      scrollEnabled={false}
+      ItemSeparatorComponent={() => <View />}
+    />
+  </ScrollView>
+</>
       )}
     </View>
   );
@@ -68,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     alignItems: 'center',
     borderRadius: 8,
     marginBottom: 15,
@@ -92,19 +115,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     marginRight: 20,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 20,
-    marginBottom: 20,
-    elevation: 2,
+    paddingLeft: 10,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   clearHistoryText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   separator: {
     height: 1,
   },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 10,
+    elevation: 3,             
+    shadowColor: '#000',      
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  cardContent: {
+    flex: 1,
+  },  
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontSize: 14,
+  },
+  
 });
 
 export default HistoryScreen; 

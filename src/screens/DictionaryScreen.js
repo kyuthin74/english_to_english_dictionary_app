@@ -70,10 +70,25 @@ const DictionaryScreen = ({ navigation }) => {
         'halcyon'
       ];
       
+    let found = false;
+    let attempts = 0;
+
+    while (!found && attempts < 5) { // try 5 times max
       const randomWord = commonWords[Math.floor(Math.random() * commonWords.length)];
-      const result = await DictionaryService.getWordDefinition(randomWord);
-      setWordOfDay(result);
-      fetchRelatedWords(result.word);
+      try {
+        const result = await DictionaryService.getWordDefinition(randomWord);
+        setWordOfDay(result);
+        fetchRelatedWords(result.word);
+        found = true;
+      } catch (err) {
+        attempts++;
+        console.log(`Word "${randomWord}" not found, retrying...`);
+      }
+    }
+
+    if (!found) {
+      console.error('Could not fetch a valid Word of the Day after multiple attempts.');
+    }
     } catch (error) {
       console.error('Error fetching word of the day:', error);
     }
@@ -108,17 +123,36 @@ const DictionaryScreen = ({ navigation }) => {
     // Enhanced mock data with difficulty levels
     const mockCategoryWords = {
       'Common Words': {
-        Beginner: ['happy', 'sad', 'good', 'bad', 'beautiful'],
-        Intermediate: ['jubilant', 'melancholy', 'excellent', 'terrible', 'gorgeous'],
-        Advanced: ['euphoric', 'despondent', 'exemplary', 'atrocious', 'resplendent'],
+        Beginner: ['happy', 'sad', 'good', 'bad', 'beautiful', 'small', 'big', 'fast', 'slow', 'kind'],
+        Intermediate: ['jubilant', 'melancholy', 'excellent', 'terrible', 'gorgeous', 'pleasant', 'foolish', 'anxious', 'generous', 'sincere'],
+        Advanced: ['euphoric', 'despondent', 'exemplary', 'atrocious', 'resplendent', 'benevolent', 'nostalgic', 'audacious', 'serendipitous', 'pernicious'],
       },
       'Business': {
-        Beginner: ['money', 'work', 'team', 'plan', 'goal'],
-        Intermediate: ['strategy', 'innovation', 'market', 'finance', 'leadership'],
-        Advanced: ['acquisition', 'diversification', 'paradigm', 'synergy', 'optimization'],
+        Beginner: ['money', 'work', 'team', 'plan', 'goal', 'boss', 'sell', 'buy', 'office', 'job'],
+        Intermediate: ['strategy', 'innovation', 'market', 'finance', 'leadership', 'revenue', 'profit', 'startup', 'meeting', 'growth'],
+        Advanced: ['acquisition', 'diversification', 'paradigm', 'synergy', 'optimization', 'entrepreneurship', 'capitalization', 'benchmarking', 'globalization', 'sustainability'],
       },
-      // ... add more categories with difficulty levels
-    };
+      'Technology': {
+        Beginner: ['computer', 'internet', 'phone', 'app', 'robot', 'game', 'screen', 'mouse', 'keyboard', 'camera'],
+        Intermediate: ['software', 'hardware', 'database', 'network', 'algorithm', 'server', 'program', 'browser', 'download', 'upload'],
+        Advanced: ['artificial intelligence', 'blockchain', 'quantum computing', 'cybersecurity', 'nanotechnology', 'machine learning', 'cryptography', 'virtual reality', 'augmented reality', 'biometrics'],
+      },
+      'Science': {
+        Beginner: ['plant', 'animal', 'water', 'earth', 'star', 'sun', 'moon', 'tree', 'rock', 'cloud'],
+        Intermediate: ['biology', 'chemistry', 'physics', 'genetics', 'astronomy', 'geology', 'zoology', 'botany', 'meteorology', 'ecology'],
+        Advanced: ['photosynthesis', 'thermodynamics', 'evolution', 'relativity', 'microbiology', 'immunology', 'paleontology', 'neuroscience', 'biochemistry', 'quantum mechanics'],
+      },
+      'Arts': {
+        Beginner: ['paint', 'song', 'dance', 'story', 'color', 'drum', 'violin', 'pen', 'chalk', 'canvas'],
+        Intermediate: ['sculpture', 'poetry', 'theater', 'design', 'composition', 'portrait', 'mural', 'novel', 'opera', 'ballet'],
+        Advanced: ['renaissance', 'expressionism', 'aesthetics', 'surrealism', 'choreography', 'impressionism', 'cubism', 'minimalism', 'abstract', 'baroque'],
+      },
+      'Nature': {
+        Beginner: ['tree', 'river', 'mountain', 'flower', 'bird', 'leaf', 'stone', 'beach', 'rain', 'snow'],
+        Intermediate: ['ecosystem', 'habitat', 'biodiversity', 'climate', 'wildlife', 'rainforest', 'volcano', 'savanna', 'desert', 'prairie'],
+        Advanced: ['conservation', 'sustainability', 'reforestation', 'ecology', 'endangered species', 'deforestation', 'carbon footprint', 'pollination', 'biosphere', 'hydrosphere'],
+      },
+    };       
     setCategoryWords(mockCategoryWords[category]?.[difficulty] || []);
   };
 
@@ -133,18 +167,25 @@ const DictionaryScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+        <Text style={styles.headerTitle}>Dictionary</Text>
+      </View>
+      <ScrollView>
       {/* Word of the Day Section */}
       {wordOfDay && (
         <Card style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <Card.Content>
             <View style={styles.cardHeader}>
-              <Title style={{ color: theme.colors.primary }}>Word of the Day</Title>
+              <Text style={{ color: theme.colors.primary, fontSize:20, fontWeight:'bold' }}>Word of the Day</Text>
             </View>
-            <Title style={{ color: theme.colors.text }}>{wordOfDay.word}</Title>
-            <View style={styles.audioContainer}>
-              <AudioButton word={wordOfDay.word} color={theme.colors.primary} />
-            </View>
+            <View style={styles.wordAudioContainer}>
+  <Title style={[styles.wordText, { color: theme.colors.text }]}>
+    {wordOfDay.word}
+  </Title>
+  <AudioButton word={wordOfDay.word} color={theme.colors.primary} />
+</View>
+
             <Paragraph style={{ color: theme.colors.text }}>
               {wordOfDay.meanings[0]?.definitions[0]?.definition}
             </Paragraph>
@@ -178,7 +219,7 @@ const DictionaryScreen = ({ navigation }) => {
 
       {/* Difficulty Level Selection */}
       <View style={styles.difficultyContainer}>
-        <Title style={{ color: theme.colors.text, marginLeft: 16 }}>Difficulty Level</Title>
+        <Text style={{ color: theme.colors.text, marginLeft: 16, fontSize:18, fontWeight: 'bold'}}>Difficulty Level</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
           {difficultyLevels.map((level) => (
             <Chip
@@ -199,7 +240,7 @@ const DictionaryScreen = ({ navigation }) => {
 
       {/* Categories Section */}
       <View style={styles.categoriesContainer}>
-        <Title style={{ color: theme.colors.text, marginLeft: 16 }}>Categories</Title>
+        <Text style={{ color: theme.colors.text, marginLeft: 16, fontSize:16, fontWeight: 'bold' }}>Categories</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
           {categories.map((category) => (
             <Chip
@@ -220,9 +261,9 @@ const DictionaryScreen = ({ navigation }) => {
 
       {/* Category Words Section */}
       <View style={styles.wordsContainer}>
-        <Title style={{ color: theme.colors.text, marginLeft: 16 }}>
+        <Text style={{ color: theme.colors.text, marginLeft: 16,fontSize:16, fontWeight: 'bold' }}>
           Words in {selectedCategory} ({selectedDifficulty})
-        </Title>
+        </Text>
         <View style={styles.wordsGrid}>
           {categoryWords.map((word) => (
             <TouchableOpacity
@@ -235,7 +276,8 @@ const DictionaryScreen = ({ navigation }) => {
           ))}
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -243,9 +285,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    paddingVertical: 10,
+    alignItems: 'center',
+    marginBottom: 15,
+    width: '100%',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   card: {
     margin: 16,
-    elevation: 4,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -253,6 +305,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  wordAudioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  wordText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginRight: 8,
+  },
+  
   audioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -292,11 +355,11 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   wordCard: {
-    padding: 16,
+    padding: 10,
     margin: 4,
-    borderRadius: 8,
+    borderRadius: 5,
     elevation: 2,
-    width: '45%',
+    width: '40%',
     alignItems: 'center',
   },
 });

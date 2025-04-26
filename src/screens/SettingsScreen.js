@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 const SettingsScreen = () => {
   const { theme, toggleDarkMode, updateFontSize } = useContext(ThemeContext);
 
-  const fontSizes = [14, 16, 18, 20];
+  const fontSizes = [22, 20, 18, 16, 14];
 
   return (
     <ScrollView
@@ -16,9 +16,12 @@ const SettingsScreen = () => {
               <Text style={styles.headerTitle}>Settings</Text>
             </View>
       <List.Section>
-        <List.Subheader style={{ color: theme.colors.text }}>
-          Appearance
-        </List.Subheader>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+  <Text style={{ color: theme.colors.text, fontSize: 18, fontWeight: 'bold' }}>
+    Appearance
+  </Text>
+</View>
+
         <List.Item
           title="Dark Mode"
           right={() => (
@@ -31,22 +34,30 @@ const SettingsScreen = () => {
           titleStyle={{ color: theme.colors.text }}
         />
         <Divider />
-        <List.Subheader style={{ color: theme.colors.text }}>
-          Font Size
-        </List.Subheader>
-        {fontSizes.map((size) => (
-          <List.Item
-            key={size}
-            title={`${size}px`}
-            onPress={() => updateFontSize(size)}
-            right={() =>
-              size === theme.fontSize ? (
-                <List.Icon icon="check" color={theme.colors.primary} />
-              ) : null
-            }
-            titleStyle={{ color: theme.colors.text }}
-          />
-        ))}
+        <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+  <Text style={{ color: theme.colors.text, fontSize: 18, fontWeight: 'bold' }}>
+    Font Size
+  </Text>
+</View>
+
+{fontSizes.map((size) => (
+  <List.Item
+    key={size}
+    title={`${size}px`}
+    onPress={() => updateFontSize(size)}
+    titleStyle={{
+      color: theme.colors.text,
+      fontSize: size, 
+      fontWeight: size === theme.fontSize ? 'bold' : 'normal',
+    }}
+    right={() =>
+      size === theme.fontSize ? (
+        <List.Icon icon="check" color={theme.colors.primary} />
+      ) : null
+    }
+  />
+))}
+
       </List.Section>
     </ScrollView>
   );
@@ -57,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 15,
     width: '100%',

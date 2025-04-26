@@ -9,23 +9,29 @@ const FavoritesScreen = ({ navigation }) => {
   const { favorites, removeFromFavorites } = useContext(WordContext);
 
   const renderItem = ({ item }) => (
-    <List.Item
-      title={item.word}
-      description={item.meanings[0]?.definitions[0]?.definition}
-      onPress={() => navigation.navigate('Search', { word: item })}
-      right={() => (
-        <IconButton
-          icon="heart"
-          iconColor={theme.colors.primary}
-          size={24}
-          onPress={() => removeFromFavorites(item.word)}
-        />
-      )}
-      titleStyle={{ color: theme.colors.text }}
-      descriptionStyle={{ color: theme.colors.placeholder }}
-      style={{ backgroundColor: theme.colors.card }}
-    />
+    <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
+      <TouchableOpacity
+        style={styles.cardContent}
+        onPress={() => navigation.navigate('Search', { word: item })}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+          {item.word}
+        </Text>
+        <Text style={[styles.cardSubtitle, { color: theme.colors.placeholder }]}>
+          {item.meanings[0]?.definitions[0]?.definition}
+        </Text>
+      </TouchableOpacity>
+  
+      <IconButton
+        icon="star"
+        iconColor={theme.colors.primary}
+        size={22}
+        onPress={() => removeFromFavorites(item.word)}
+      />
+    </View>
   );
+  
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -44,9 +50,7 @@ const FavoritesScreen = ({ navigation }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.word}
           ItemSeparatorComponent={() => (
-            <View
-              style={[styles.separator, { backgroundColor: theme.colors.border }]}
-            />
+            <View/>
           )}
         />
       )}
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 15,
     width: '100%',
@@ -77,9 +81,30 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
   },
-  separator: {
-    height: 1,
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    elevation: 3,             // Android shadow
+    shadowColor: '#000',      // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
   },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontSize: 14,
+  },  
 });
 
 export default FavoritesScreen; 

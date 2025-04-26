@@ -116,7 +116,7 @@ const SearchScreen = ({ navigation, route }) => {
             <View style={styles.wordActions}>
               <AudioButton word={definition.word} />
               <IconButton
-                icon={isFavorite ? 'heart' : 'heart-outline'}
+                icon={isFavorite ? 'star' : 'star-outline'}
                 iconColor={isFavorite ? theme.colors.primary : theme.colors.text}
                 size={24}
                 onPress={toggleFavorite}
@@ -166,12 +166,10 @@ const SearchScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
   header: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     alignItems: 'center',
-    borderRadius: 8,
     marginBottom: 15,
     width: '100%',
   },
@@ -182,20 +180,26 @@ const styles = StyleSheet.create({
   },  
   searchContainer: {
     flexDirection: 'row',
+    alignItems: 'center',      
+    marginHorizontal: 15,      
     marginBottom: 20,
   },
   input: {
     flex: 1,
-    height: 50,
+    height: 40,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginRight: 10,
   },
   button: {
+    height: 40,              
     paddingHorizontal: 20,
     justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 8,
+    minWidth: 80,            
+    elevation: 2,
   },
   buttonText: {
     color: '#fff',
@@ -218,6 +222,7 @@ const styles = StyleSheet.create({
   },
   definitionContainer: {
     flex: 1,
+    paddingHorizontal: 20,
   },
   wordHeader: {
     flexDirection: 'row',

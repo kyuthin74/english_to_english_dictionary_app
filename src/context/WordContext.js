@@ -72,18 +72,26 @@ export const WordProvider = ({ children }) => {
     setHistory([]);
     await saveHistory([]);
   };
+  const removeFromHistory = async (timestamp) => {
+    const newHistory = history.filter(item => item.timestamp !== timestamp);
+    setHistory(newHistory);
+    await saveHistory(newHistory);
+  };
+  
 
   return (
     <WordContext.Provider
-      value={{
-        favorites,
-        history,
-        addToFavorites,
-        removeFromFavorites,
-        addToHistory,
-        clearHistory,
-      }}
-    >
+  value={{
+    favorites,
+    history,
+    addToFavorites,
+    removeFromFavorites,
+    addToHistory,
+    clearHistory,
+    removeFromHistory,
+  }}
+>
+
       {children}
     </WordContext.Provider>
   );
