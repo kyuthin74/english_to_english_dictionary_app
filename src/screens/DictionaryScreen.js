@@ -12,8 +12,6 @@ import {
   Title,
   Paragraph,
   Chip,
-  IconButton,
-  Badge,
 } from 'react-native-paper';
 import { ThemeContext } from '../context/ThemeContext';
 import { WordContext } from '../context/WordContext';
@@ -177,13 +175,13 @@ const DictionaryScreen = ({ navigation }) => {
         <Card style={[styles.card, { backgroundColor: theme.colors.card }]}>
           <Card.Content>
             <View style={styles.cardHeader}>
-              <Text style={{ color: theme.colors.primary, fontSize:20, fontWeight:'bold' }}>Word of the Day</Text>
+              <Text style={{ color: theme.colors.text, fontSize:20, fontWeight:'bold' }}>Word of the Day</Text>
             </View>
             <View style={styles.wordAudioContainer}>
   <Title style={[styles.wordText, { color: theme.colors.text }]}>
     {wordOfDay.word}
   </Title>
-  <AudioButton word={wordOfDay.word} color={theme.colors.primary} />
+  <AudioButton word={wordOfDay.word} color={theme.colors.primary}/>
 </View>
 
             <Paragraph style={{ color: theme.colors.text }}>
@@ -352,6 +350,7 @@ const styles = StyleSheet.create({
   wordsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
     padding: 16,
   },
   wordCard: {

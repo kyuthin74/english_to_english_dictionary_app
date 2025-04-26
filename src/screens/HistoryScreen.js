@@ -20,24 +20,27 @@ const HistoryScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('Search', { word: item.word })}
         activeOpacity={0.7}
       >
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
-            {item.word.word}
-          </Text>
-          <Text style={[styles.cardSubtitle, { color: theme.colors.placeholder }]}>
-            {formatDate(item.timestamp)}
-          </Text>
-        </View>
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+          {item.word.word}
+        </Text>
+        <Text style={[styles.cardSubtitle, { color: theme.colors.placeholder }]}>
+          {formatDate(item.timestamp)}
+        </Text>
       </TouchableOpacity>
   
-      <IconButton
-        icon="delete"
-        iconColor={theme.colors.primary}
-        size={20}
+      <TouchableOpacity
         onPress={() => handleDeleteOne(item.timestamp)}
-      />
+        style={styles.closeButton}
+      >
+        <IconButton
+          icon="close" // <-- changed icon from "delete" to "close"
+          iconColor={theme.colors.primary}
+          size={18}
+        />
+      </TouchableOpacity>
     </View>
   );
+  
   
   const handleDeleteOne = (timestamp) => {
     removeFromHistory(timestamp);
@@ -66,10 +69,11 @@ const HistoryScreen = ({ navigation }) => {
       onPress={clearHistory}
       style={[styles.clearHistoryContainer, { backgroundColor: theme.colors.border }]}
     >
-      <Text style={[styles.clearHistoryText, { color: theme.colors.text }]}>
-        Delete All Histories
-      </Text>
       <IconButton icon="delete" iconColor={theme.colors.primary} size={18} />
+      <Text style={[styles.clearHistoryText, { color: theme.colors.text }]}>
+        Delete All 
+      </Text>
+      
     </TouchableOpacity>
 
     <FlatList
@@ -93,7 +97,6 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 10,
     alignItems: 'center',
-    borderRadius: 8,
     marginBottom: 15,
     width: '100%',
   },
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     marginRight: 20,
-    paddingLeft: 10,
+    paddingRight: 10,
     borderRadius: 8,
     marginBottom: 10,
   },
@@ -150,7 +153,11 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 14,
   },
-  
+  closeButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+  },  
 });
 
 export default HistoryScreen; 

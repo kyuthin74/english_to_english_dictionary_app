@@ -23,7 +23,7 @@ const AudioButton = ({ word }) => {
         icon={() => (
           <MaterialCommunityIcons
             name={isPlaying && currentWord === word ? 'volume-high' : 'volume-medium'}
-            size={24}
+            size={30}
             color={theme.colors.primary}
           />
         )}

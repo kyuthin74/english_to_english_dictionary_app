@@ -13,7 +13,6 @@ import { DictionaryService } from '../services/DictionaryService';
 import { ThemeContext } from '../context/ThemeContext';
 import { WordContext } from '../context/WordContext';
 import AudioButton from '../components/AudioButton';
-import { SafeAreaView } from 'react-native';
 
 const SearchScreen = ({ navigation, route }) => {
   const { theme } = useContext(ThemeContext);
@@ -118,7 +117,7 @@ const SearchScreen = ({ navigation, route }) => {
               <IconButton
                 icon={isFavorite ? 'star' : 'star-outline'}
                 iconColor={isFavorite ? theme.colors.primary : theme.colors.text}
-                size={24}
+                size={30}
                 onPress={toggleFavorite}
               />
             </View>
@@ -213,7 +212,8 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     padding: 15,
-    backgroundColor: '#ffebee',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 8,
     marginBottom: 20,
   },

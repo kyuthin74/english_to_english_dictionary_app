@@ -26,7 +26,7 @@ const FavoritesScreen = ({ navigation }) => {
       <IconButton
         icon="star"
         iconColor={theme.colors.primary}
-        size={22}
+        size={28}
         onPress={() => removeFromFavorites(item.word)}
       />
     </View>
